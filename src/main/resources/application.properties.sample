@@ -1,6 +1,17 @@
 gg.jte.development-mode=true
 spring.application.name=Ai-Application
+
 spring.ai.openai.api-key=YOUR_OPENAI_API_KEY
 spring.ai.openai.base-url=YOUR_OPENAI_API_BASE_URL_IF_ANY
 spring.ai.openai.chat.options.model=YOUR_PREFERRED_MODEL
+
+spring.datasource.url=jdbc:mysql://<hostname>/<dbname>
+spring.datasource.username=<username>
+spring.datasource.password=<password>
+
+ |   should only use true during development
+ v
+spring.jpa.show-sql=true/false
+spring.jpa.generate-ddl=true/false
+
 
