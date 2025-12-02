@@ -1,6 +1,6 @@
-@param cs3220.aiapplication.model.User user
-@param java.util.List<cs3220.aiapplication.model.Recipe> recipeHistory
-@param java.util.List<cs3220.aiapplication.model.Recipe> favoriteHistory
+@param cs3220.aiapplication.model.UserJDBC user
+@param java.util.List<cs3220.aiapplication.model.RecipeJDBC> recipeHistory
+@param java.util.List<cs3220.aiapplication.model.RecipeJDBC> favoriteHistory
 @param int ingredientCount
 
 <!doctype html>

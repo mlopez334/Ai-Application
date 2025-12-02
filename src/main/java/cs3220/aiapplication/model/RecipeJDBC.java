@@ -20,7 +20,10 @@ public class RecipeJDBC {
     private String title;
     private LocalTime date;
     private String prompt;
+    @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Column(columnDefinition = "TEXT")
     private String mainIngredients;
     private boolean favorite;
 
@@ -81,5 +84,13 @@ public class RecipeJDBC {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public UserJDBC getUser(){
+        return user;
+    }
+
+    public void setUser(UserJDBC user){
+        this.user = user;
     }
 }

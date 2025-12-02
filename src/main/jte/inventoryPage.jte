@@ -1,6 +1,6 @@
-@param java.util.List<cs3220.aiapplication.model.Ingredient> ingredients
-@param java.util.List<cs3220.aiapplication.model.Recipe> recipes
-@param java.util.List<cs3220.aiapplication.model.Recipe> favorites
+@param java.util.List<cs3220.aiapplication.model.IngredientJDBC> ingredients
+@param java.util.List<cs3220.aiapplication.model.RecipeJDBC> recipes
+@param java.util.List<cs3220.aiapplication.model.RecipeJDBC> favorites
 @param String tab
 
 <!DOCTYPE html>

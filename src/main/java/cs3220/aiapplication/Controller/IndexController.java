@@ -1,25 +1,52 @@
 package cs3220.aiapplication.Controller;
 
 import cs3220.aiapplication.model.*;
+import cs3220.aiapplication.repository.IngredientRepository;
+import cs3220.aiapplication.repository.RecipeRepository;
+import cs3220.aiapplication.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 public class IndexController {
 
-    private final DataStore dataStore;
     private final UserBean userBean;
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public IndexController(DataStore dataStore, UserBean userBean) {
-        this.dataStore = dataStore;
+    public IndexController(UserBean userBean, UserRepository userRepository, RecipeRepository recipeRepository, IngredientRepository ingredientRepository) {
         this.userBean = userBean;
+        this.userRepository = userRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.recipeRepository = recipeRepository;
     }
+
     @GetMapping("/")
     public String landingPage() {
+    // create root + guest user it not already
+        if(userRepository.findUserJDBCByEmail("root@example.com") == null) {
+            UserJDBC root = new UserJDBC();
+            root.setEmail("root@example.com");
+            root.setUsername("root@example.com");
+            root.setPassword("1234");
+            userRepository.save(root);
+        }
+
+        if(userRepository.findUserJDBCByEmail("guest@example.com") == null) {
+            UserJDBC guest = new UserJDBC();
+            guest.setEmail("guest@example.com");
+            guest.setUsername("guest@example.com");
+            guest.setPassword("1234");
+            userRepository.save(guest);
+        }
+
         return "landingPage";
     }
-
 
     @GetMapping("/inventory")
     public String inventoryPage(
@@ -29,56 +56,81 @@ public class IndexController {
         if (!userBean.isLoggedIn()) {
             return "redirect:/login";
         }
+//        int userId = userBean.getUser().getId();
+//        model.addAttribute("ingredients", dataStore.getIngredient(userId));
+//        model.addAttribute("recipes", dataStore.getRecipes(userId));
+//        model.addAttribute("favorites", dataStore.getFavorites(userId));
+//        model.addAttribute("tab", tab);
 
-        int userId = userBean.getUser().getId();
+        UserJDBC user = userBean.getUser();
+        int userId = user.getId();
 
-        model.addAttribute("ingredients", dataStore.getIngredient(userId));
-        model.addAttribute("recipes", dataStore.getRecipes(userId));
-        model.addAttribute("favorites", dataStore.getFavorites(userId));
+        List<IngredientJDBC> ingredients = ingredientRepository.findByUserId(userId);
+        List<RecipeJDBC> recipes = recipeRepository.findByUserId(userId);
+        List<RecipeJDBC> favorites = recipes.stream().filter(RecipeJDBC::isFavorite).toList();
+
+        model.addAttribute("ingredients", ingredients);
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("favorites", favorites);
         model.addAttribute("tab", tab);
 
         return "inventoryPage";
     }
-
 
     @GetMapping("/results")
     public String resultsPage(Model model){
         if(!userBean.isLoggedIn()) {
             return "redirect:/login";
 
-        } else {
-            int userId = userBean.getUser().getId();
-            model.addAttribute("recipes", dataStore.getRecipes(userId));
-            model.addAttribute("favorites", dataStore.getFavorites(userId));
-            return "resultsPage";
         }
+
+        int userId = userBean.getUser().getId();
+        List<RecipeJDBC> recipes = recipeRepository.findByUserId(userId);
+        List<RecipeJDBC> favorites = recipes.stream().filter(RecipeJDBC::isFavorite).toList();
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("favorites", favorites);
+
+        return "resultsPage";
+
+
     }
 
     @GetMapping("/favorites")
-    public String favoritesPage(Model model){
-        if(!userBean.isLoggedIn()) {
+    public String favoritesPage(Model model) {
+        if (!userBean.isLoggedIn()) {
             return "redirect:/login";
 
-        } else {
-            int userId = userBean.getUser().getId();
-            model.addAttribute("recipes", dataStore.getRecipes(userId));
-            model.addAttribute("favorites", dataStore.getFavorites(userId));
-            return "favoritePage";
         }
+
+        int userId = userBean.getUser().getId();
+        List<RecipeJDBC> recipes = recipeRepository.findByUserId(userId);
+        List<RecipeJDBC> favorites = recipes.stream().filter(RecipeJDBC::isFavorite).toList();
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("favorites", favorites);
+
+        return "favoritesPage";
+
     }
 
     @GetMapping("/profile")
     public String profilePage(Model model){
         if(!userBean.isLoggedIn()) {
             return "redirect:/login";
-        } else {
-            User user = userBean.getUser();
-            model.addAttribute("user", user);
-            model.addAttribute("recipeHistory", dataStore.getRecipes(user.getId()));
-            model.addAttribute("favoriteHistory", dataStore.getFavorites(user.getId()));
-            model.addAttribute("ingredientCount", dataStore.getIngredient(user.getId()).size());
-            return "userProfile";
         }
+    UserJDBC user = userBean.getUser();
+        int userId = user.getId();
+        List<RecipeJDBC> recipes = recipeRepository.findByUserId(userId);
+        List<RecipeJDBC> favorites = recipes.stream().filter(RecipeJDBC::isFavorite).toList();
+        List<IngredientJDBC> ingredients = ingredientRepository.findByUserId(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("recipeHistory", recipes);
+        model.addAttribute("favoriteHistory", favorites);
+        model.addAttribute("ingredientCount", ingredients.size());
+
+
+        return "userProfile";
     }
 
     @GetMapping("/changeUsername")
@@ -94,12 +146,13 @@ public class IndexController {
     public String changeUsername(@RequestParam("username") String username) {
         if (!userBean.isLoggedIn()) {
             return "redirect:/login";
-        } else {
-            User user = userBean.getUser();
+        }
+            UserJDBC user = userBean.getUser();
             user.setUsername(username);
+            userRepository.save(user);
 
             return "redirect:/profile";
-        }
+
     }
         @GetMapping("/viewRecipe")
         public String viewRecipe(@RequestParam(value="tab", defaultValue="history") String tab, @RequestParam("id") int id, Model model){
@@ -108,44 +161,60 @@ public class IndexController {
             }
 
             int userId = userBean.getUser().getId();
-            Recipe recipe = dataStore.getRecipes(userId).stream().filter(r -> r.getId() ==id).findFirst().orElse(null);
+            Optional<RecipeJDBC> recipeOpt = recipeRepository.findById(id);
 
-            if(recipe==null){
+
+            if(recipeOpt.isEmpty()){
                 return "redirect:/home";
             }
 
-            // Use DataStore recipes for the sidebar
+            RecipeJDBC recipe = recipeOpt.get();
+            List<RecipeJDBC> recipes = recipeRepository.findByUserId(userId);
+            List<RecipeJDBC> favorites = recipes.stream().filter(RecipeJDBC::isFavorite).toList();
+
             model.addAttribute("tab", tab);
-            model.addAttribute("recipes", dataStore.getRecipes(userId));
-            model.addAttribute("favorites", dataStore.getFavorites(userId));
+            model.addAttribute("recipes", recipes);
+            model.addAttribute("favorites", favorites);
             model.addAttribute("recipeById", recipe);
             return "viewRecipe";
 
     }
 
     @GetMapping("/favoriteRecipe")
-    public String favoriteRecipe(@RequestParam int id, @RequestParam(required=false, defaultValue="history") String tab){
+    public String favoriteRecipe(@RequestParam int id,
+                                 @RequestParam(required=false, defaultValue="history") String tab) {
+
         int userId = userBean.getUser().getId();
-        dataStore.toggleFavorite(userId, id);
+        RecipeJDBC recipe = recipeRepository.findById(id).orElse(null);
 
+        // Prevent null user reference crash
+        if (recipe != null) {
+            UserJDBC recipeUser = recipe.getUser();
 
-        return "redirect:/viewRecipe?id=" + id + "&tab="+tab;
+            if (recipeUser != null && recipeUser.getId() == userId) {
+                recipe.setFavorite(!recipe.isFavorite());
+                recipeRepository.save(recipe);
+            }
+        }
+
+        return "redirect:/viewRecipe?id=" + id + "&tab=" + tab;
     }
 
-    @GetMapping("/deleteRecipe")
-    public String deleteRecipe(@RequestParam int id){
-        int userId = userBean.getUser().getId();
-        Recipe recipe = dataStore.getRecipeById(userId, id);
 
-        dataStore.deleteRecipe(userId, recipe.getId());
+
+    @GetMapping("/deleteRecipe")
+    public String deleteRecipe(@RequestParam int id) {
+
+        int userId = userBean.getUser().getId();
+
+        RecipeJDBC recipe = recipeRepository.findById(id).orElse(null);
+
+        if (recipe != null && recipe.getUser() != null && recipe.getUser().getId() == userId) {
+            recipeRepository.deleteById(id);
+        }
+
         return "redirect:/home";
     }
 
-
-
-
 }
-
-
-
 

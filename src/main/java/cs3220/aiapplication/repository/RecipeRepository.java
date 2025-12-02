@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface RecipeRepository extends CrudRepository<RecipeJDBC, Integer> {
-    List<Recipe> findByUserId(Integer userId);
+    List<RecipeJDBC> findByUserId(Integer userId);
 }

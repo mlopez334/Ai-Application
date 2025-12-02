@@ -1,9 +1,7 @@
 package cs3220.aiapplication.Controller;
 
-import cs3220.aiapplication.model.DataStore;
-import cs3220.aiapplication.model.Ingredient;
-import cs3220.aiapplication.model.User;
-import cs3220.aiapplication.model.UserBean;
+import cs3220.aiapplication.model.*;
+import cs3220.aiapplication.repository.IngredientRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class IngredientController {
-    public final DataStore dataStore;
     public final UserBean userBean;
+    public final IngredientRepository ingredientRepository;
 
-    public IngredientController(DataStore dataStore, UserBean userBean){
-        this.dataStore = dataStore;
+    public IngredientController(UserBean userBean, IngredientRepository ingredientRepository) {
         this.userBean = userBean;
+        this.ingredientRepository = ingredientRepository;
     }
 
     @GetMapping("/addIngredientPage")
@@ -31,11 +29,16 @@ public class IngredientController {
 
     @PostMapping("/addIngredientPage")
     public String addIngredient(@RequestParam("name") String name, @RequestParam("quantity") String quantity) {
-        User currUser = userBean.getUser();
+        UserJDBC currUser = userBean.getUser();
         if (currUser == null) {
             return "redirect:/login";
         } else {
-            dataStore.addIngredient(currUser.getId(), new Ingredient(name, quantity));
+            //dataStore.addIngredient(currUser.getId(), new Ingredient(name, quantity));
+            IngredientJDBC ingredient = new IngredientJDBC();
+            ingredient.setName(name);
+            ingredient.setQuantity(quantity);
+            ingredient.setUser(currUser);
+            ingredientRepository.save(ingredient);
         }
 
         return "redirect:/inventory";
@@ -47,18 +50,20 @@ public class IngredientController {
         if(!userBean.isLoggedIn()) {
             return "redirect:/login";
         }
-        User user =  userBean.getUser();
+        UserJDBC user =  userBean.getUser();
         if(user == null){
             return "redirect:/inventory";
         }
-        Ingredient ingredient = dataStore.getIngredient(user.getId())
-                .stream()
-                .filter(i -> i.getId() == id)
-                .findFirst()
-                .orElse(null);
+//        Ingredient ingredient = dataStore.getIngredient(user.getId())
+//                .stream()
+//                .filter(i -> i.getId() == id)
+//                .findFirst()
+//                .orElse(null);
+        IngredientJDBC ingredient = ingredientRepository.findById(id).orElse(null);
         if(ingredient == null){
             return "redirect:/inventory";
         }
+
         model.addAttribute("ingredient", ingredient);
         return "editInventory";
     }
@@ -68,14 +73,17 @@ public class IngredientController {
         if (!userBean.isLoggedIn()) {
             return "redirect:/login";
         }
-        User user = userBean.getUser();
+        UserJDBC user = userBean.getUser();
 
-        Ingredient ingredient = dataStore.getIngredient(user.getId()).stream().filter(i -> i.getId() == id).findFirst().orElse(null);
+        //Ingredient ingredient = dataStore.getIngredient(user.getId()).stream().filter(i -> i.getId() == id).findFirst().orElse(null);
+        IngredientJDBC ingredient = ingredientRepository.findById(id).orElse(null);
         if (ingredient == null) {
             return "redirect:/inventory";
         } else {
             ingredient.setName(name);
             ingredient.setQuantity(quantity);
+            ingredient.setUser(user);
+            ingredientRepository.save(ingredient);
             return "redirect:/inventory";
         }
     }
@@ -85,8 +93,12 @@ public class IngredientController {
         if(!userBean.isLoggedIn()){
             return "redirect:/login";
         }
-        User user = userBean.getUser();
-        dataStore.deleteIngredient(user.getId(), id);
+        UserJDBC user = userBean.getUser();
+       // dataStore.deleteIngredient(user.getId(), id);
+        IngredientJDBC ingredient = ingredientRepository.findById(id).orElse(null);
+        if(ingredient != null){
+            ingredientRepository.delete(ingredient);
+        }
         return "redirect:/inventory";
 
     }

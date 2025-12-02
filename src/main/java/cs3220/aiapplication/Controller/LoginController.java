@@ -3,6 +3,9 @@ package cs3220.aiapplication.Controller;
 import cs3220.aiapplication.model.DataStore;
 import cs3220.aiapplication.model.User;
 import cs3220.aiapplication.model.UserBean;
+import cs3220.aiapplication.model.UserJDBC;
+import cs3220.aiapplication.repository.UserRepository;
+import org.springframework.messaging.simp.user.UserDestinationResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
-    private final DataStore dataStore;
+    private final UserRepository userRepository;
     private final UserBean userBean;
 
-    public LoginController(DataStore dataStore, UserBean userBean) {
-        this.dataStore = dataStore;
+    public LoginController( UserBean userBean, UserRepository userRepository) {
         this.userBean = userBean;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/login")
@@ -26,13 +29,15 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
-        User user = dataStore.getUserByCredentials(username, password);
-        if (user == null) {
-            model.addAttribute("error", "Wrong username or password.");
+       // look up user
+        UserJDBC user = userRepository.findUserJDBCByEmailAndPassword(username,password);
+
+        if(user == null){
+            model.addAttribute("error", "Wrong Username or Password.");
             return "loginPage";
         }
 
-        userBean.login(user);
+        userBean.setUser(user);
         return "redirect:/home";
     }
 
@@ -48,15 +53,22 @@ public class LoginController {
     }
 
     @PostMapping("/newAccount")
-    public String newAccount(@RequestParam("email") String email, @RequestParam("password") String password){
-       if(dataStore.userExists(email)){
-           return "createAccountPage";
-       }
+    public String newAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
 
-       User newUser = dataStore.createUser(email, password);
+        // if acc alr exists dont make a copy
+        if(userRepository.findUserJDBCByEmail(email) != null){
+            model.addAttribute("error", "Email already registered.");
+            return "createAccountPage";
+        }
 
-       userBean.setUser(newUser);
-       userBean.isLoggedIn();
+        // create new user
+        UserJDBC newUser = new UserJDBC();
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        newUser.setUsername(email);
+
+        userRepository.save(newUser);
+        userBean.setUser(newUser);
 
        return "redirect:/home";
 

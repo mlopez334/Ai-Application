@@ -1,4 +1,4 @@
-@param cs3220.aiapplication.model.Ingredient ingredient
+@param cs3220.aiapplication.model.IngredientJDBC ingredient
 
 
 <!doctype html>

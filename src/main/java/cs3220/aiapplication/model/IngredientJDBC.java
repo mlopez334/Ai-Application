@@ -56,4 +56,6 @@ public class IngredientJDBC {
     public void setUser(UserJDBC user) {
         this.user = user;
     }
+
+
 }

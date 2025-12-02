@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IngredientRepository extends CrudRepository<IngredientJDBC,Integer> {
     List<IngredientJDBC> findByUserId(Integer userId);
+
 }

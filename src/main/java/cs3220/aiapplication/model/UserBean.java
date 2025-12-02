@@ -9,14 +9,14 @@ import java.util.List;
 @Component
 @SessionScope
 public class UserBean {
-    private User user;
+    private UserJDBC user;
     private final List<Exchange> exchangeHistory  = new ArrayList<>();
 
     public boolean isLoggedIn() {
         return user != null;
     }
 
-    public void login(User user) {
+    public void login(UserJDBC user) {
         this.user = user;
     }
 
@@ -24,7 +24,7 @@ public class UserBean {
         this.user = null;
     }
 
-    public User getUser() {
+    public UserJDBC getUser() {
         return user;
     }
 
@@ -36,7 +36,7 @@ public class UserBean {
         exchangeHistory.add(exchange);
     }
 
-    public void setUser(User user){
+    public void setUser(UserJDBC user){
         this.user = user;
     }
 
