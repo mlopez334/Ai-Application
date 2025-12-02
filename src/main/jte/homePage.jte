@@ -190,7 +190,7 @@
         <!-- NEW: Radio Buttons Below -->
         <div class="mt-3 d-flex justify-content-center gap-4">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="level" id="beginner" value="beginner">
+                <input class="form-check-input" type="radio" name="level" id="beginner" value="beginner" checked = "e">
                 <label class="form-check-label" for="beginner">Beginner</label>
             </div>
 
