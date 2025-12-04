@@ -62,7 +62,6 @@
         <img src="images/logo.png" height="40">
         <a>Recipe Maker</a>
     </div>
-    <a href="createAccount" class="btn btn-primary col-lg-auto" role="button" aria-disabled="true">Register</a>
     <a href="login" class="btn btn-secondary col-lg-auto bg-info" role="button" aria-disabled="true">Login</a>
 
 

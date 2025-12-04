@@ -70,12 +70,12 @@
         }
 
         .sidebar {
+            position: sticky;
             width: 250px;
             transition: all 0.3s;
             background-color: lightgray;
             color: black;
             border-right: black 2px solid;
-
             height: 100vh;
             overflow-y: auto;
             overflow-x:hidden;
@@ -117,10 +117,10 @@
         <button class="btn btn-outline-dark me-2 " id="toggleSidebar">&#9776;</button>
         <div class="title">
             <img src="images/logo.png" height="40">
-            <a href="home">Recipe Maker</a>
+            <a href="/home?tab=${tab}">Recipe Maker</a>
         </div>
         <div class="profile">
-            <a href="profile"><i class="bi bi-person-circle text-dark" ></i></a>
+            <a href="/profile?tab=${tab}"><i class="bi bi-person-circle text-dark" ></i></a>
         </div>
     </div>
 </header>
@@ -132,8 +132,8 @@
     </div>
     <div class="menu-btns">
         <div class="btn-group" role="group" aria-label="Navigation button group">
-            <a href="/home?tab=history" class="btn btn-outline-secondary btn-lg">History</a>
-            <a href="/home?tab=favorites" class="btn btn-outline-secondary btn-lg">Favorites</a>
+            <a href="/home?tab=history" class="btn btn-lg ${tab.equals("history") ? "btn-secondary" : "btn-outline-secondary"}">History</a>
+            <a href="/home?tab=favorites" class="btn btn-lg ${tab.equals("favorites") ? "btn-secondary" : "btn-outline-secondary"}">Favorites</a>
         </div>
     </div>
     <h6 class="mt-3">Recent Recipes</h6>
@@ -145,7 +145,7 @@
             <li>No Recept Recipes...</li>
         @endif
         @for(var recipe: favorites)
-            <a href="viewRecipe?id=${recipe.getId()}" class="nav-link">
+            <a href="viewRecipe?id=${recipe.getId()}&tab=${tab}" class="nav-link">
             <div>
                 <small>#${recipe.getId()}</small>
                 <strong>${recipe.getTitle()}</strong><br>
@@ -160,7 +160,7 @@
             <li>No Recept Recipes...</li>
         @endif
         @for(var recipe: recipes)
-            <a href="viewRecipe?id=${recipe.getId()}" class="nav-link">
+            <a href="viewRecipe?id=${recipe.getId()}&tab=${tab}" class="nav-link">
                 <div>
                     <small>#${recipe.getId()}</small>
                     <strong>${recipe.getTitle()}</strong><br>
@@ -173,7 +173,7 @@
         @endif
     </ul>
     <div class="inventory">
-        <a class="btn btn-success btn-lg" href="inventory" role="button">Inventory</a>
+        <a class="btn btn-success btn-lg" href="inventory?tab=${tab}" role="button">Inventory</a>
     </div>
 </div>
 

@@ -48,6 +48,7 @@ public class IndexController {
         return "landingPage";
     }
 
+
     @GetMapping("/inventory")
     public String inventoryPage(
             @RequestParam(value = "tab", defaultValue = "history") String tab,
@@ -115,7 +116,7 @@ public class IndexController {
     }
 
     @GetMapping("/profile")
-    public String profilePage(Model model){
+    public String profilePage(Model model,  @RequestParam(value = "tab", defaultValue = "history") String tab){
         if(!userBean.isLoggedIn()) {
             return "redirect:/login";
         }
@@ -128,6 +129,7 @@ public class IndexController {
         model.addAttribute("recipeHistory", recipes);
         model.addAttribute("favoriteHistory", favorites);
         model.addAttribute("ingredientCount", ingredients.size());
+        model.addAttribute("tab", tab);
 
 
         return "userProfile";
@@ -203,7 +205,7 @@ public class IndexController {
 
 
     @GetMapping("/deleteRecipe")
-    public String deleteRecipe(@RequestParam int id) {
+    public String deleteRecipe(@RequestParam int id, @RequestParam(required=false, defaultValue="history") String tab) {
 
         int userId = userBean.getUser().getId();
 
@@ -213,7 +215,7 @@ public class IndexController {
             recipeRepository.deleteById(id);
         }
 
-        return "redirect:/home";
+        return "redirect:/home?tab=" + tab;
     }
 
 }

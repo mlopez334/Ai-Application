@@ -2,6 +2,7 @@
 @param java.util.List<cs3220.aiapplication.model.RecipeJDBC> recipeHistory
 @param java.util.List<cs3220.aiapplication.model.RecipeJDBC> favoriteHistory
 @param int ingredientCount
+@param String tab
 
 <!doctype html>
 <html lang="en">
@@ -54,14 +55,14 @@
 </head>
 
 <header class = "bg-success">
-    <div class = "col-md-1"></div>
-    <div class="title col-md-10 text-center">
-        <img src="images/logo.png" height="40">
-        <a href = "home"> Recipe Maker</a>
+
+    <div class="mx-auto">
+        <div class = "title">
+            <img src="images/logo.png" height="40">
+            <a href = "/home?tab=${tab}" class = "fs-1"> Recipe Maker</a>
+        </div>
     </div>
-    <div class = "col-md-1 text-end">
-        <a href="/logout" class="btn btn-secondary col-lg-auto bg-info float-right" role="button" aria-disabled="true">Logout</a>
-    </div>
+    <a href="/logout" class="btn btn-secondary col-lg-auto bg-info" role="button" aria-disabled="true">Logout</a>
 
 </header>
 <body style="background-color: lightgray;">
@@ -79,7 +80,7 @@
         <p>Username: ${user.getUsername()} | <a href="changeUsername">Change Username</a></p>
         <p>Total Recipes: (${recipeHistory.size()}) | <a href="/home?tab=history">View Recipes</a></p>
         <p>Favorite Recipes: (${favoriteHistory.size()}) | <a href="/home?tab=favorites">View Favorites</a></p>
-        <p>Ingredients: (${ingredientCount}) | <a href="inventory">View Inventory</a></p>
+        <p>Ingredients: (${ingredientCount}) | <a href="/inventory?tab=${tab}">View Inventory</a></p>
         <p></p>
     </div>
 </div>
