@@ -153,13 +153,19 @@
 
 
 
-    <h6 class="mt-3">Recent Recipes</h6>
-    <!--    similar to Lab6 create a List of History and load them using for loop-->
+    @if(tab.equals("favorites"))
+
+        <h6 class="mt-3">Favorites</h6>
+    @else
+        <h6 class="mt-3">Recent Recipes</h6>
+
+    @endif
+
     <ul class="history-item">
         @if(tab.equals("favorites"))
 
             @if(favorites.isEmpty())
-                <li>No Recept Recipes...</li>
+                <li>No Favorite Recipies...</li>
             @endif
             @for(var recipe: favorites)
                 <a href="viewRecipe?id=${recipe.getId()}&tab=${tab}" class="nav-link">

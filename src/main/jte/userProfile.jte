@@ -68,41 +68,42 @@
     </div>
 
 </header>
-<div class="d-flex justify-content-between align-items-center mb-3" style="padding: 0 10px;">
-    <h1 class="user-info mb-0">${user.getUsername()}'s Info:</h1>
-    <div class="profile mt-2">
-        @if(user.getProfilePicture() != null && !user.getProfilePicture().isEmpty())
-            <img src="/images/${user.getProfilePicture()}" width="100" height="100" class="rounded-circle"/>
-        @else
-            <i class="bi bi-person-circle text-dark fs-1"></i>
-        @endif
+<body style = "background-color: lightgray;">
+    <div class="d-flex justify-content-between align-items-center mb-3" style="padding: 0 10px;">
+        <h1 class="user-info mb-0">${user.getUsername()}'s Info:</h1>
+        <div class="profile mt-2">
+            @if(user.getProfilePicture() != null && !user.getProfilePicture().isEmpty())
+                <img src="/images/${user.getProfilePicture()}" width="100" height="100" class="rounded-circle"/>
+            @else
+                <i class="bi bi-person-circle text-dark fs-1"></i>
+            @endif
+        </div>
     </div>
-</div>
 
-<div class="container-fluid text-center">
+    <div class="container-fluid text-center">
 
-    <div class = "mx-90 container-fluid text-start p-5 " style = "background-color: floralwhite">
-        <p>Email: ${user.getEmail()}</p>
-<%--        change profile icon--%>
-        <form action="/uploadProfilePicture" method="post" enctype="multipart/form-data" class="mb-3">
-            <input type="file" name="profilePic" class="form-control mb-2" required>
-            <div class="d-flex justify-content-left">
-                <button type="submit" class="btn btn-success">Upload</button>
-                <form action="/deleteProfilePicture" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </form>
-
+        <div class = "mx-90 container-fluid text-start p-5 " style = "background-color: white;">
+            <p>Email: ${user.getEmail()}</p>
+    <%--        change profile icon--%>
+            <form action="/uploadProfilePicture" method="post" enctype="multipart/form-data" class="mb-3">
+                <input type="file" name="profilePic" class="form-control mb-2" required>
+                <div class="d-flex justify-content-left">
+                    <button type="submit" class="btn btn-success">Upload</button>
+                    <form action="/deleteProfilePicture" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </form>
 
 
-        <br>
-        <p>Username: ${user.getUsername()} | <a href="changeUsername">Change Username</a></p>
-        <p>Total Recipes: (${recipeHistory.size()}) | <a href="/home?tab=history">View Recipes</a></p>
-        <p>Favorite Recipes: (${favoriteHistory.size()}) | <a href="/home?tab=favorites">View Favorites</a></p>
-        <p>Ingredients: (${ingredientCount}) | <a href="/inventory?tab=${tab}">View Inventory</a></p>
-        <p></p>
+
+            <br>
+            <p>Username: ${user.getUsername()} | <a href="changeUsername">Change Username</a></p>
+            <p>Total Recipes: (${recipeHistory.size()}) | <a href="/home?tab=history">View Recipes</a></p>
+            <p>Favorite Recipes: (${favoriteHistory.size()}) | <a href="/home?tab=favorites">View Favorites</a></p>
+            <p>Ingredients: (${ingredientCount}) | <a href="/inventory?tab=${tab}">View Inventory</a></p>
+            <p></p>
+        </div>
     </div>
-</div>
 </body>
 </html>
