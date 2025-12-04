@@ -30,6 +30,9 @@
     gap: 10px;
     }
 
+    .profilebtn{
+        margin: 4px;
+    }
     .user-info {
     margin: 0;
     padding-top: 25px;
@@ -54,6 +57,7 @@
     </style>
 </head>
 
+<body>
 <header class = "bg-success">
 
     <div class = "col-md-1"></div>
@@ -84,15 +88,18 @@
     <div class = "mx-90 container-fluid text-start p-5 " style = "background-color: floralwhite">
         <p>Email: ${user.getEmail()}</p>
 <%--        change profile icon--%>
-        <form action="/uploadProfilePicture" method="post" enctype="multipart/form-data" class="mb-3">
-            <input type="file" name="profilePic" class="form-control mb-2" required>
-            <div class="d-flex justify-content-left">
+        <input type="file" name="profilePic" class="form-control mb-2" form="uploadForm" required>
+
+        <div class="d-flex justify-content-start">
+            <form id="uploadForm" action="/uploadProfilePicture" method="post" class="profilebtn" enctype="multipart/form-data">
                 <button type="submit" class="btn btn-success">Upload</button>
-                <form action="/deleteProfilePicture" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </form>
+            </form>
+
+            <form action="/deleteProfilePicture?tab=${tab}" class="profilebtn" method="post">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+
 
 
 

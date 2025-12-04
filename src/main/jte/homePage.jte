@@ -76,7 +76,7 @@
             transition: all 0.3s;
             background-color: lightgray;
             color: black;
-            border-right: black 2px solid;
+
             height: 100vh;
             overflow-y: auto;
             overflow-x:hidden;
@@ -85,6 +85,7 @@
             margin-left: -250px;
         }
         .content {
+            border-left: black 2px solid;
             transition: margin-left 0.3s;
             margin-left: 250px;
         }
