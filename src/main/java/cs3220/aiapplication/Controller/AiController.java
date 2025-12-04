@@ -11,12 +11,16 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +88,24 @@ public class AiController {
         return String.join("\n", ingredients);
     }
 
+    private String extractInstructions(String aiResponse){
+        List<String> lines = aiResponse.lines().toList();
+        List<String> instructions = new ArrayList<>();
+        boolean inInstructions = false;
+
+        for(String line : lines){
+            if(line.startsWith("Instructions")){
+                inInstructions = true;
+                continue;
+            }
+            if(inInstructions){
+                if(line.startsWith("Main Ingredients") || line.startsWith("Title:")) break;
+                instructions.add(line.trim());
+            }
+        }
+        return String.join("\n", instructions);
+    }
+
 
     @GetMapping("/home")
     public String showHomePage(@RequestParam(value="tab", defaultValue="history") String tab, Model model){
@@ -132,6 +154,7 @@ public class AiController {
 
 
         String cookingLevel = (level == null) ?"beginner": level;
+
         System.out.println("Ingredients: " + ingredientsName);
         String ingredients = String.join(", ", ingredientsName);
         System.out.println("Ingredients String: " + ingredients);
@@ -141,12 +164,16 @@ public class AiController {
                         "The recipe must follow this exact format:\n\n" +
                         "Title: <short recipe title>\n" +
                         "Main Ingredients:\n" +
-                        "- List only 3 to 5 main ingredients from the provided ingredient list. No extras.\n" +
+                        "- List only 1 to 4 main ingredients NAMES from the provided ingredient list. No extras.\n" +
+                        "- DO NOT include the quantities for the ingredients.\n" +
                         "Instructions:\n" +
                         "<simple clear steps suitable for a " + cookingLevel + " cook>\n\n" +
+                        "Each step MUST be its own line (NOT just 1 large paragraph, use \\n to separate each step) and number each step.\n"+
                         "IMPORTANT RULES:\n" +
-                        "- Main Ingredients list must contain ONLY 3–5 items.\n" +
-                        "- Keep the output clean and formatted exactly with the three sections.";
+                        "- You MAY use the ingredient quantities (inside parentheses) to decide realistic amounts during cooking.\n" +
+                        "- BUT in the Main Ingredients list, ONLY SHOW THE INGREDIENT NAME (e.g., 'Tomato', NOT 'Tomato (2 cups)').\n" +
+                        "- Main Ingredients list must contain ONLY 1–4 UNIQUE items.\n" +
+                        "- Keep formatting clean: exactly three sections and nothing else.";
 
         String aiResponse = realChat(userPrompt);
         String mainIngredients = extractMainIngredients(aiResponse);
@@ -154,12 +181,14 @@ public class AiController {
         String title = extractTitle(aiResponse);
 
         RecipeJDBC recipe = new RecipeJDBC();
+        recipe.setCookingLevel(cookingLevel);
         recipe.setUser(userBean.getUser());
         recipe.setTitle(title);
-        recipe.setDate(LocalTime.now());
+        recipe.setDate(LocalDate.now());
         recipe.setPrompt(prompt);
         recipe.setMainIngredients(mainIngredients);
-        recipe.setContent(aiResponse);
+        String instructions = extractInstructions(aiResponse);
+        recipe.setContent(instructions);
         recipe.setFavorite(false);
 
         recipeRepository.save(recipe);
@@ -175,6 +204,9 @@ public class AiController {
 
         return "redirect:/viewRecipe?id=" + recipe.getId();
     }
+
+
+
 
 
 

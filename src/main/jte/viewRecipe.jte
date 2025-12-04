@@ -23,6 +23,7 @@
             border-bottom: black 2px solid;
 
         }
+
         /* clickable title */
         .title, .title a{
             font-size: 40px;
@@ -71,15 +72,14 @@
         }
 
         .sidebar {
+            flex-shrink: 0;
             width: 250px;
             transition: all 0.3s;
             background-color: lightgray;
             color: black;
             border-right: black 2px solid;
-
             height: 100vh;
-            overflow-y: auto;
-            overflow-x:hidden;
+
         }
         .sidebar.collapsed {
             margin-left: -250px;
@@ -118,13 +118,14 @@
         <button class="btn btn-outline-dark me-2 " id="toggleSidebar">&#9776;</button>
         <div class="title">
             <img src="images/logo.png" height="40">
-            <a href="home">Recipe Maker</a>
+            <a href="/home?tab=${tab}">Recipe Maker</a>
         </div>
         <div class="profile">
-            <a href="profile"><i class="bi bi-person-circle text-dark" ></i></a>
+            <a href="/profile?tab=${tab}"><i class="bi bi-person-circle text-dark" ></i></a>
         </div>
     </div>
 </header>
+
 
 <!-- Sidebar -->
 <div id="sidebar" class="position-absolute h-100 sidebar p-3">
@@ -182,23 +183,27 @@
         @endif
     </ul>
     <div class="inventory">
-        <a class="btn btn-success btn-lg" href="inventory" role="button">Inventory</a>
+        <a class="btn btn-success btn-lg" href="inventory?tab=${tab}" role="button">Inventory</a>
     </div>
 </div>
 
 <main id="content" class="content p-4 d-flex flex-column " style="min-height: 80vh;">
 
-    <a href="home" class="btn btn-secondary mb-3">&larr; Back Home</a>
+    <a href="/home?tab=${tab}" class="btn btn-secondary mb-3">&larr; Back Home</a>
     <a href="/favoriteRecipe?id=${recipeById.getId()}&tab=${tab}" class="btn btn-warning">${recipeById.isFavorite() ? "Unfavorite" : "Favorite"}</a>
-    <a href="/deleteRecipe?id=${recipeById.getId()}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?');">Delete Recipe</a>
+    <a href="/deleteRecipe?id=${recipeById.getId()}&tab=${tab}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?');">Delete Recipe</a>
 
-<h1>${recipeById.getTitle()}</h1>
+
+
+    <h1>${recipeById.getTitle()}</h1>
 <p>Date: ${recipeById.getDate().toString()}</p>
 <p>Main Ingredients: ${recipeById.getMainIngredients()}</p>
 
-<h2>Instructions</h2>
-<p>${recipeById.getContent()}</p>
+    <h2>Instructions</h2>
+    <pre style="white-space: pre-wrap;">${recipeById.getContent()}</pre>
+
 </main>
+
 
 
 <script>

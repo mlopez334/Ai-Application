@@ -3,6 +3,7 @@ package cs3220.aiapplication.model;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -18,8 +19,9 @@ public class RecipeJDBC {
     private UserJDBC user;
 
     private String title;
-    private LocalTime date;
+    private LocalDate date;
     private String prompt;
+    private String cookingLevel;
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -37,7 +39,6 @@ public class RecipeJDBC {
         this.id = id;
     }
 
-
     public String getTitle() {
         return title;
     }
@@ -46,11 +47,11 @@ public class RecipeJDBC {
         this.title = title;
     }
 
-    public LocalTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -88,6 +89,14 @@ public class RecipeJDBC {
 
     public UserJDBC getUser(){
         return user;
+    }
+
+    public String getCookingLevel() {
+        return cookingLevel;
+    }
+
+    public void setCookingLevel(String cookingLevel) {
+        this.cookingLevel = cookingLevel;
     }
 
     public void setUser(UserJDBC user){
