@@ -208,7 +208,7 @@
             <a href="/home?tab=${tab}" class="btn btn-secondary">&larr; Back Home</a>
         </div>
             <div class = "col-6 text-center">
-                <a href="file.mp3" download="file.mp3"> <button>Export</button></a>
+                <a href="download/${recipeById.getId()}" download="download/${recipeById.getId()}"> <button>Export</button></a>
             </div>
         <div class = "col-3">
             <a href="/favoriteRecipe?id=${recipeById.getId()}&tab=${tab}" class="btn btn-warning">${recipeById.isFavorite() ? "Unfavorite" : "Favorite"}</a>

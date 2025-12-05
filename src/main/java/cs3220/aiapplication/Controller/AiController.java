@@ -1,5 +1,6 @@
 package cs3220.aiapplication.Controller;
 
+import com.lowagie.text.*;
 import cs3220.aiapplication.model.*;
 import cs3220.aiapplication.repository.IngredientRepository;
 import cs3220.aiapplication.repository.RecipeRepository;
@@ -24,6 +25,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.core.io.InputStreamResource;
+import java.io.*;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import com.lowagie.text.pdf.PdfWriter;
+
 
 @Controller
 public class AiController {
@@ -208,8 +217,57 @@ public class AiController {
     }
 
 
+    @GetMapping("/download/{id}")
+    public  ResponseEntity<Resource>  export(@PathVariable int id, Model model) throws FileNotFoundException {
+
+        RecipeJDBC r = recipeRepository.findById(id).get();
+
+        Document document = new Document();
+
+        try (FileOutputStream fos = new FileOutputStream("src/main/resources/generatedPdf/recipe" + id + ".pdf")) {
+            PdfWriter.getInstance(document, fos);
+            document.open();
+
+            Font title = new Font(1, 24);
+
+            document.addTitle(r.getTitle());
+
+            Paragraph p = new Paragraph(r.getTitle(), title);
+            p.setAlignment(Element.ALIGN_CENTER);
+            document.add(p);
+
+            p =  new Paragraph("Ingredients: \n" + r.getMainIngredients());
+            p.setAlignment(Element.ALIGN_CENTER);
+            document.add(p);
+
+            p = new Paragraph("Instructions:\n", title);
+            p.setAlignment(Element.ALIGN_CENTER);
+            document.add(p);
+
+            p = new Paragraph(r.getContent());
+            p.setAlignment(Element.ALIGN_CENTER);
+            document.add(p);
+            document.close();
+
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream("src/main/resources/generatedPdf/recipe" + id + ".pdf"));
+        File file = new File("src/main/resources/generatedPdf/recipe" + id + ".pdf");
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=recipe" + id + ".pdf");
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
 
 
+        return  ResponseEntity.ok()
+                .headers(header)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
 
 
 
