@@ -5,7 +5,6 @@ import cs3220.aiapplication.model.*;
 import cs3220.aiapplication.repository.IngredientRepository;
 import cs3220.aiapplication.repository.RecipeRepository;
 import cs3220.aiapplication.repository.UserRepository;
-import org.hibernate.graph.InvalidGraphException;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.core.io.InputStreamResource;
 import java.io.*;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import com.lowagie.text.pdf.PdfWriter;
 
 

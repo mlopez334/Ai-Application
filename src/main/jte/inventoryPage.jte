@@ -95,11 +95,15 @@
         }
         /* sidebar button */
         .sidebar {
+            position: sticky;
             width: 250px;
             transition: all 0.3s;
             background-color: lightgray;
             color: black;
-            /*border-right: black 2px solid;*/
+
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x:hidden;
         }
         .sidebar.collapsed {
             margin-left: -250px;
@@ -108,6 +112,7 @@
             transition: margin-left 0.3s;
             margin-left: 250px;
             border-left: black 2px solid;
+            height: 100vh;
         }
         .content.expanded {
             margin-left: 0;

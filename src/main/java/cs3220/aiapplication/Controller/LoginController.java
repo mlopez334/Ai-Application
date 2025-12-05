@@ -1,11 +1,9 @@
 package cs3220.aiapplication.Controller;
 
-import cs3220.aiapplication.model.DataStore;
-import cs3220.aiapplication.model.User;
+
 import cs3220.aiapplication.model.UserBean;
 import cs3220.aiapplication.model.UserJDBC;
 import cs3220.aiapplication.repository.UserRepository;
-import org.springframework.messaging.simp.user.UserDestinationResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

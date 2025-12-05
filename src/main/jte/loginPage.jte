@@ -72,7 +72,7 @@
 
 <form method="post" action="/login">
     <label for="username">Username:</label><br />
-    <input type="text" id="username" name="username" size="40" /><br /><br />
+    <input type="text" id="username" name="username" size="40" required/><br /><br />
 
     <label for="password">Password:</label><br />
     <input
@@ -80,6 +80,7 @@
             id="password"
             name="password"
             size="40"
+            required
     /><br /><br />
     <input type="submit" value="Log In" />
 </form>

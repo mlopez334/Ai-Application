@@ -34,12 +34,14 @@ public class IndexController {
     @GetMapping("/")
     public String landingPage() {
     // create root + guest user it not already
+        // add ingrdients to root user
         if(userRepository.findUserJDBCByEmail("root@example.com") == null) {
             UserJDBC root = new UserJDBC();
             root.setEmail("root@example.com");
             root.setUsername("root@example.com");
             root.setPassword("1234");
             userRepository.save(root);
+
         }
 
         if(userRepository.findUserJDBCByEmail("guest@example.com") == null) {
@@ -62,11 +64,6 @@ public class IndexController {
         if (!userBean.isLoggedIn()) {
             return "redirect:/login";
         }
-//        int userId = userBean.getUser().getId();
-//        model.addAttribute("ingredients", dataStore.getIngredient(userId));
-//        model.addAttribute("recipes", dataStore.getRecipes(userId));
-//        model.addAttribute("favorites", dataStore.getFavorites(userId));
-//        model.addAttribute("tab", tab);
 
         UserJDBC user = userBean.getUser();
         int userId = user.getId();

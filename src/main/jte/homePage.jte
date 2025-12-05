@@ -210,7 +210,7 @@
     <form action="/home" method="post" class="w-100" style="max-width: 600px;">
         <div class="input-group">
             <input type="text" name="prompt" class="form-control" placeholder="What's for dinner?">
-            <button class="btn btn-success" type="submit">&rarr;</button>
+            <button id="generateBtn" class="btn btn-success" type="submit">&rarr;</button>
         </div>
 
         <!-- NEW: Radio Buttons Below -->
@@ -263,5 +263,18 @@
     if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
     if (toggleBtnMobile) toggleBtnMobile.addEventListener("click", toggleSidebar);
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("generateBtn");
+        const form = btn.closest("form");
+
+        form.addEventListener("submit", () => {
+            btn.disabled = true;
+            btn.innerHTML = "Generating...";
+        });
+    });
+</script>
+
 </body>
 </html>
