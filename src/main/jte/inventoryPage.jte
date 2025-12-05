@@ -99,7 +99,7 @@
             transition: all 0.3s;
             background-color: lightgray;
             color: black;
-            border-right: black 2px solid;
+            /*border-right: black 2px solid;*/
         }
         .sidebar.collapsed {
             margin-left: -250px;
@@ -107,6 +107,7 @@
         .content {
             transition: margin-left 0.3s;
             margin-left: 250px;
+            border-left: black 2px solid;
         }
         .content.expanded {
             margin-left: 0;
