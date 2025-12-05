@@ -220,6 +220,7 @@ public class AiController {
     @GetMapping("/download/{id}")
     public  ResponseEntity<Resource>  export(@PathVariable int id, Model model) throws FileNotFoundException {
 
+        UserJDBC user = userBean.getUser();
         RecipeJDBC r = recipeRepository.findById(id).get();
 
         Document document = new Document();
@@ -232,20 +233,31 @@ public class AiController {
 
             document.addTitle(r.getTitle());
 
+            Paragraph username = new Paragraph("Recipe created by: " + user.getUsername(), title);
+            username.setAlignment(Paragraph.ALIGN_CENTER);
+
+
+            String imgFile = "src/main/resources/static/images/" + user.getProfilePicture();
+            Image image = Image.getInstance(imgFile);
+            image.scaleAbsolute(75,75);
+            image.setAlignment(Image.ALIGN_RIGHT);
+            username.add(image);
+            document.add(username);
+
             Paragraph p = new Paragraph(r.getTitle(), title);
-            p.setAlignment(Element.ALIGN_CENTER);
+            p.setAlignment(Element.ALIGN_LEFT);
             document.add(p);
 
-            p =  new Paragraph("Ingredients: \n" + r.getMainIngredients());
-            p.setAlignment(Element.ALIGN_CENTER);
+            p =  new Paragraph("\nIngredients: \n" + r.getMainIngredients());
+            p.setAlignment(Element.ALIGN_LEFT);
             document.add(p);
 
             p = new Paragraph("Instructions:\n", title);
-            p.setAlignment(Element.ALIGN_CENTER);
+            p.setAlignment(Element.ALIGN_LEFT);
             document.add(p);
 
             p = new Paragraph(r.getContent());
-            p.setAlignment(Element.ALIGN_CENTER);
+            p.setAlignment(Element.ALIGN_LEFT);
             document.add(p);
             document.close();
 
