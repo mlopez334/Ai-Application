@@ -61,7 +61,8 @@
     </style>
 </head>
 
-<body>
+<body style = "background-color: lightgray;">
+<%--<body>--%>
 <header class = "bg-success">
 
     <div class = "col-md-1"></div>
@@ -77,19 +78,23 @@
 
 </header>
 <div class="d-flex justify-content-between align-items-center mb-3" style="padding: 0 10px;">
-    <h1 class="user-info mb-0">${user.getUsername()}'s Info:</h1>
     <div class="profile mt-2">
         @if(user.getProfilePicture() != null && !user.getProfilePicture().isEmpty())
             <img src="/images/${user.getProfilePicture()}" width="100" height="100" class="rounded-circle"/>
         @else
             <i class="bi bi-person-circle text-dark fs-1"></i>
         @endif
+        <span class = "h1 align-bottom">${user.getUsername()}'s Info:</span>
     </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="padding: 0 10px;">
+
 </div>
 
 <div class="container-fluid text-center">
 
-    <div class = "mx-90 container-fluid text-start p-5 " style = "background-color: floralwhite">
+    <div class = "mx-90 container-fluid text-start p-5 " style = "background-color: white">
         <p>Email: ${user.getEmail()}</p>
 <%--        change profile icon--%>
         <input type="file" name="profilePic" class="form-control mb-2" form="uploadForm" required>
