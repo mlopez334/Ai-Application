@@ -49,8 +49,8 @@
         <div class = "text-center">
             <h1 class = "p-3">Add Ingredient</h1>
             <form action="/addIngredientPage" method="post">
-                <input class = "p-3 text-center form-control-sm" type="text" name="name" placeholder="Ingredient name">
-                <input class = "p-3 text-center form-control-sm" type="text" name="quantity" placeholder="Quantity" style="width: 100px;"><br><br>
+                <input class = "p-3 text-center form-control-sm" type="text" name="name" placeholder="Ingredient name" required>
+                <input class = "p-3 text-center form-control-sm" type="text" name="quantity" placeholder="Quantity" style="width: 100px;" required><br><br>
                 <button type="submit">Add Ingredient</button>
             </form>
         </div>

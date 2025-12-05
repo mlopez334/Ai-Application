@@ -28,9 +28,9 @@
 
     <form method="post" action="/newAccount">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Email: <input type="text" name="email"><br/><br/>
+            Email: <input type="text" name="email" required><br/><br/>
 
-            Password: <input type="password" name="password"><br/><br/>
+            Password: <input type="password" name="password" required><br/><br/>
             <button type="submit">Create Account</button>
         </form>
 </main>
