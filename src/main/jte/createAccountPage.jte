@@ -21,7 +21,7 @@
 
 
 </header>
-<main class="container-fluid text-center" style="background-color: #f9f9f9;">
+<main class="container text-center col-4 pb-5" style="background-color: #f9f9f9; min-width: 400px">
     <div class = "mt-5 mb-5" >
         <h1>Create Account</h1>
     </div>
@@ -32,7 +32,9 @@
 
             Password: <input type="password" name="password" required><br/><br/>
             <button type="submit">Create Account</button>
-        </form>
+        <a href = "login"><button type="button">Cancel</button></a>
+
+    </form>
 </main>
 </body>
 </html>
