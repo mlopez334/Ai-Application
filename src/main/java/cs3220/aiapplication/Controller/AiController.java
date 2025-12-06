@@ -234,12 +234,15 @@ public class AiController {
             Paragraph username = new Paragraph("Recipe created by: " + user.getUsername(), title);
             username.setAlignment(Paragraph.ALIGN_CENTER);
 
-
-            String imgFile = "src/main/resources/static/images/" + user.getProfilePicture();
-            Image image = Image.getInstance(imgFile);
-            image.scaleAbsolute(75,75);
-            image.setAlignment(Image.ALIGN_RIGHT);
-            username.add(image);
+            try {
+                String imgFile = "src/main/resources/static/images/" + user.getProfilePicture();
+                Image image = Image.getInstance(imgFile);
+                image.scaleAbsolute(75, 75);
+                image.setAlignment(Image.ALIGN_RIGHT);
+                username.add(image);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             document.add(username);
 
             Paragraph p = new Paragraph(r.getTitle(), title);
