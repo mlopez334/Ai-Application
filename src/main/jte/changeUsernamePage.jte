@@ -46,6 +46,40 @@
             height: 200px;
         }
 
+        form {
+            background-color: white;
+            gap: 15px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            padding: 12px 15px;
+            width: 250px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+            border: none;
+            background: lightgrey;
+            color: black;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            background: gray;
+            color: white;
+        }
+
 
     </style>
 </head>
@@ -62,9 +96,11 @@
 
 <body style = "background-color: lightgray;">
 <br/><div class = "h1 text-center">Change Username</div><br/>
-<form method="post" action="/changeUsername" class = "mx-auto text-center">
+<form method="post" action="/changeUsername" class = "mx-auto text-center col-6" style = "min-width: 300px;">
     <input type="text" required = "e" name="username" placeholder="New Username"><br>
+    <br/>
     <button>Change Username</button>
+    <br/>
     <a href = "profile"><button type = "button">Cancel</button></a>
 </form>
 </body>
