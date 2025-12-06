@@ -63,7 +63,7 @@
             <div></div>
             <div class="title">
                 &nbsp;
-                <img src="images/logo.png" height="40">
+                <img src="/images/logo.png" height="40" alt="[Logo]">
                 <a href="/home?tab=${tab}">Recipe Maker</a>
             </div>
             <div></div>
@@ -83,7 +83,7 @@
         <input class = "p-3 text-center form-control-sm" type="text" name="quantity" value="${ingredient.getQuantity()}"><br><br>
         <button>Save</button>
 
-        <a href="/inventory" class="btn btn-default border border-dark">Cancel</a>
+        <a href="/inventory"> <button type = "button">Cancel</button></a>
 
     </form>
 

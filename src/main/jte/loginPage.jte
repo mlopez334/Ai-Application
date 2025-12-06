@@ -63,14 +63,16 @@
 
 <body>
 <header class="navbar d-none d-sm-flex bg-success px-4 py-2">
-    <div class="mx-auto title">
-        <img src="images/logo.png" height="40" />
-        <a>Recipe Maker</a>
-    </div>
+    <a href = "/">
+        <div class="mx-auto title">
+            <img src="images/logo.png" height="40" />
+            <a href = "/">Recipe Maker</a>
+        </div>
+    </a>
 </header>
 <h1>Login</h1>
 
-<form method="post" action="/login">
+<form method="post" action="/login" style = "min-width: 430px;">
     <label for="username">Username:</label><br />
     <input type="text" id="username" name="username" size="40" required/><br /><br />
 
@@ -85,8 +87,10 @@
     <input type="submit" value="Log In" />
 </form>
 
-<p>
-    <a href="createAccount">Create Account</a>
+<p class = "d-flex" style = "min-width: 430px;">
+    <a class = "text-start" href="createAccount">Create Account</a>
+    <a class="ms-auto link-secondary" href = "/">Cancel</a>
+
 </p>
 
 <footer

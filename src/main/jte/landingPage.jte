@@ -56,20 +56,28 @@
     <h2 class="col-lg-auto text-center">Recipe Maker</h2>
     <a href="#" class="btn btn-secondary col-lg-auto" tabindex="-1" role="button" aria-disabled="true">Login</a>
   </div> -->
-<header class="navbar d-none d-sm-flex bg-success px-4 py-2">
-
-    <div class="mx-auto title">
-        <img src="images/logo.png" height="40">
-        <a>Recipe Maker</a>
-    </div>
-    <a href="login" class="btn btn-secondary col-lg-auto bg-info" role="button" aria-disabled="true">Login</a>
+<header class="navbar d-sm-flex bg-success px-4 py-2">
+        <div class = "col-2"></div>
+        <div class = "col-8 mx-auto text-center">
+            <a href = "login">
+                <div class="mx-auto title">
+                     <img src="images/logo.png" height="40" alt="[Logo]">
+                    <a href = "login">Recipe Maker</a>
+                </div>
+            </a>
+        </div>
+        <div class = "col-2 mx-auto text-end">
+            <a href="login" class="btn btn-secondary col-lg-auto bg-info" role="button" aria-disabled="true">Login</a>
+        </div>
 
 
 </header>
 
 <!-- main -->
 <main class="container-fluid px-4 py-4">
-    <img src="images/logo.png" id="logo" />
+    <div class = "justify-content-center">
+        <div class = "mx-auto col-4" style = "min-width: 300px;"><a href="login" class = "bg-warning"> <img src="images/logo.png" id="logo"  alt="[Logo]"/>  </a> </div>
+    </div>
     <div>
         <h3>About Us</h3>
         <p>

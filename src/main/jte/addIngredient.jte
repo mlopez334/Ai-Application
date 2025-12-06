@@ -52,6 +52,7 @@
                 <input class = "p-3 text-center form-control-sm" type="text" name="name" placeholder="Ingredient name" required>
                 <input class = "p-3 text-center form-control-sm" type="text" name="quantity" placeholder="Quantity" style="width: 100px;" required><br><br>
                 <button type="submit">Add Ingredient</button>
+                <a href = "inventory"><button type = "button">Cancel</button></a>
             </form>
         </div>
     </body>
